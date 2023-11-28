@@ -2,7 +2,9 @@
 %% Topic: Investing long memory of Financial time series using Hurst exponent found from visibility graph
 
 %% Downloading the data using Yahoo-Quandl-Market-Data-Downloader
-initDate = '1-Jul-2023';
+% Adding the path for the folder.
+addpath("Yahoo-Quandl-Market-Data-Donwloader-master\");
+initDate = '1-Jul-2007';
 symbol = 'GOOGL';
 aaplusd_yahoo_raw = getMarketDataViaYahoo(symbol, initDate);
 
