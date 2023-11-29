@@ -4,7 +4,7 @@
 %% Downloading the data using Yahoo-Quandl-Market-Data-Downloader
 % Adding the path for the folder.
 addpath("Yahoo-Quandl-Market-Data-Donwloader-master\");
-initDate = '1-Jul-2007';
+initDate = '1-Jul-2023';
 symbol = 'GOOGL';
 aaplusd_yahoo_raw = getMarketDataViaYahoo(symbol, initDate);
 
@@ -35,6 +35,7 @@ H = per(closingPrice, 1);
 %% Creating the adjacency list.
 G = cell(length(closingPrice), 1); % Initialize adjacency list (cell array)
 t = 1:length(closingPrice); % Create time vector
+%t = dates;
 
 %% Define the left and right indices for the range of data you want to consider
 leftIndex = 1;
@@ -53,8 +54,13 @@ for i = leftIndex:rightIndex
     G{i} = find(visibility); % Store visible nodes in the adjacency list
 end
 
+
+%% Call fast_NVG function to create the visibility graph
+visibilityGraph = fast_NVG(closingPrice,t,'u',0);
+
+%{
 %% Call NVG_alg function to create the visibility graph
-visibilityGraph = NVG_alg(closingPrice, leftIndex, rightIndex, G, t, weight);
+%visibilityGraph = NVG_alg(closingPrice, leftIndex, rightIndex, G, t, weight);
 
 %% Assuming visibilityGraph contains adjacency lists in the first column and weights in the second column
 for i = 1:length(visibilityGraph)
@@ -85,8 +91,12 @@ for i = 1:numNodes
         G1 = addedge(G1, i, neighbors(j), edgeWeights(j));
     end
 end
+%}
 
+G1 = graph(visibilityGraph);
 %% Plot the network graph
 figure;
 h = plot(G1, 'Layout', 'force'); % Use 'force' layout for better visualization
 title('Visibility Graph Network');
+
+
